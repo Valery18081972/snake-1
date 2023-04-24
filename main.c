@@ -199,7 +199,7 @@ void initFood(struct food f[], size_t size) {
 }
 
 void init(struct snake *head, int number, struct tail *tail, size_t size) {
-    clear(); // очищаем весь экран
+   // clear(); // очищаем весь экран
     initTail(tail, MAX_TAIL_SIZE);
     initHead(head);
     head->number = number;
@@ -211,7 +211,7 @@ void init(struct snake *head, int number, struct tail *tail, size_t size) {
  Движение хвоста с учетом движения головы
  */
 void goTail(struct snake *head) {
-    char ch[] = "O";
+    char ch[] = "*";
     setColor(head->number);
     mvprintw(head->tail[head->tsize - 1].y, head->tail[head->tsize - 1].x, " ");
     for (size_t i = head->tsize - 1; i > 0; i--) {
