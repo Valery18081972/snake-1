@@ -41,7 +41,7 @@ struct tail {
  Еда массив точек
  x, y - координата где установлена точка
  put_time - время когда данная точка была установлена
- point - внешний вид точки ('$','E'...)
+ point - внешний вид точки ('O','E'...)
  enable - была ли точка съедена
  */
 struct food {
@@ -93,10 +93,10 @@ void setColor(int objectType){
  */
 void go(struct snake *head) {
     setColor(head->number);
-    char ch[] = "@";
+    char ch[] = "#";
     int max_x = 0, max_y = 0;
     getmaxyx(stdscr, max_y, max_x); // macro - размер терминала
-    //clear(); // очищаем весь экран
+    clear(); // очищаем весь экран
     mvprintw(head->y, head->x, " "); // очищаем один символ
     switch (head->direction) {
         case LEFT:
@@ -211,7 +211,7 @@ void init(struct snake *head, int number, struct tail *tail, size_t size) {
  Движение хвоста с учетом движения головы
  */
 void goTail(struct snake *head) {
-    char ch[] = "*";
+    char ch[] = "O";
     setColor(head->number);
     mvprintw(head->tail[head->tsize - 1].y, head->tail[head->tsize - 1].x, " ");
     for (size_t i = head->tsize - 1; i > 0; i--) {
@@ -260,10 +260,10 @@ void putFoodSeed(struct food *fp) {
 // Мигаем зерном, перед тем как оно исчезнет
 void blinkFood(struct food fp[], size_t nfood) {
     time_t current_time = time(NULL);
-    char spoint[2] = {0}; // как выглядит зерно '$','\0'
+    char spoint[2] = {0}; // как выглядит зерно 'O','\0'
     for (size_t i = 0; i < nfood; i++) {
         if (fp[i].enable && (current_time - fp[i].put_time) > 6) {
-            spoint[0] = (current_time % 2) ? 'S' : 's';
+            spoint[0] = (current_time % 2) ? 'O' : 'o';
             setColor(FOOD);
             mvprintw(fp[i].y, fp[i].x, spoint);
         }
