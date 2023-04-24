@@ -96,7 +96,7 @@ void go(struct snake *head) {
     char ch[] = "#";
     int max_x = 0, max_y = 0;
     getmaxyx(stdscr, max_y, max_x); // macro - размер терминала
-    clear(); // очищаем весь экран
+    //clear(); // очищаем весь экран
     mvprintw(head->y, head->x, " "); // очищаем один символ
     switch (head->direction) {
         case LEFT:
@@ -166,8 +166,8 @@ void autoChangeDirection(struct snake *snake, struct food food[], int foodSize) 
 
 
 int checkDirection(int32_t dir, int32_t key) {
-    if (KEY_DOWN == key && dir == UP || KEY_UP == key && dir == DOWN || KEY_LEFT == key && dir == RIGHT ||
-        KEY_RIGHT == key && dir == LEFT) {
+    if ((KEY_DOWN == key && dir == UP) || (KEY_UP == key && dir == DOWN) || (KEY_LEFT == key && dir == RIGHT) ||
+        (KEY_RIGHT == key && dir == LEFT)) {
         return 0;
     } else {
         return 1;
@@ -199,7 +199,7 @@ void initFood(struct food f[], size_t size) {
 }
 
 void init(struct snake *head, int number, struct tail *tail, size_t size) {
-   // clear(); // очищаем весь экран
+    clear(); // очищаем весь экран
     initTail(tail, MAX_TAIL_SIZE);
     initHead(head);
     head->number = number;
@@ -250,7 +250,7 @@ void putFoodSeed(struct food *fp) {
     fp->x = rand() % (max_x - 1);
     fp->y = rand() % (max_y - 2) + 1; //Не занимаем верхнюю строку
     fp->put_time = time(NULL);
-    fp->point = '$';
+    fp->point = 'o';
     fp->enable = 1;
     spoint[0] = fp->point;
     setColor(FOOD);
@@ -260,10 +260,10 @@ void putFoodSeed(struct food *fp) {
 // Мигаем зерном, перед тем как оно исчезнет
 void blinkFood(struct food fp[], size_t nfood) {
     time_t current_time = time(NULL);
-    char spoint[2] = {0}; // как выглядит зерно 'O','\0'
+    char spoint[2] = {0}; // как выглядит зерно '$','\0'
     for (size_t i = 0; i < nfood; i++) {
         if (fp[i].enable && (current_time - fp[i].put_time) > 6) {
-            spoint[0] = (current_time % 2) ? 'O' : 'o';
+            spoint[0] = (current_time % 3) ? 'O' : 'o';
             setColor(FOOD);
             mvprintw(fp[i].y, fp[i].x, spoint);
         }
@@ -275,7 +275,7 @@ void repairSeed(struct food f[], size_t nfood, struct snake *head) {
         for (size_t j = 0; j < nfood; j++) {
             /* Если хвост совпадает с зерном */
             if (f[j].x == head->tail[i].x && f[j].y == head->tail[i].y && f[i].enable) {
-                mvprintw(0, 0, "Repair tail seed %d", j);
+                mvprintw(0, 0, "Repair tail seed %ld", j);
                 putFoodSeed(&f[j]);
             }
         }
@@ -283,7 +283,7 @@ void repairSeed(struct food f[], size_t nfood, struct snake *head) {
         for (size_t j = 0; j < nfood; j++) {
             /* Если два зерна на одной точке */
             if (i != j && f[i].enable && f[j].enable && f[j].x == f[i].x && f[j].y == f[i].y && f[i].enable) {
-                mvprintw(0, 0, "Repair same seed %d", j);
+                mvprintw(0, 0, "Repair same seed %ld", j);
                 putFoodSeed(&f[j]);
             }
         }
@@ -325,18 +325,18 @@ void printLevel(struct snake *head) {
     getmaxyx(stdscr, max_y, max_x);
     if (head->number == SNAKE1){
         setColor(head->number);
-        mvprintw(0, max_x - 10, "LEVEL: %d", head->tsize);
+        mvprintw(0, max_x - 10, "LEVEL: %ld", head->tsize);
     }
     if (head->number == SNAKE2){
         setColor(head->number);
-        mvprintw(1, max_x - 10, "LEVEL: %d", head->tsize);
+        mvprintw(1, max_x - 10, "LEVEL: %ld", head->tsize);
     }
 }
 
 void printExit(struct snake *head) {
     int max_x = 0, max_y = 0;
     getmaxyx(stdscr, max_y, max_x);
-    mvprintw(max_y / 2, max_x / 2 - 5, "Your LEVEL is %d", head->tsize);
+    mvprintw(max_y / 2, max_x / 2 - 5, "Your LEVEL is %ld", head->tsize);
 }
 
 _Bool isCrash(struct snake *head) {
@@ -374,7 +374,7 @@ void startMenu()
             mvprintw(10, 30, "   S N A K E    S N A K E    S N A K E     S N A K E     ");
             mvprintw(13, 30, "@**************                              ****************@");
 
-    char ch = (int) NULL;
+    char ch ;
     while(1) {
 		ch = getch();
         if(ch == '1') {
@@ -448,3 +448,4 @@ int main() {
 
     return 0;
 }
+
